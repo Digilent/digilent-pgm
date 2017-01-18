@@ -10,7 +10,7 @@ QT += serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = pgm
+TARGET = digilentPgm
 TEMPLATE = app
 
 

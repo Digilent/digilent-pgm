@@ -6,7 +6,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QString>
-
+#include <QTime>
 #include <QtSerialPort/QSerialPort>
 #include <QTextStream>
 #include <QCoreApplication>
@@ -17,8 +17,16 @@
 
 int main(int argc, char *argv[])
 {
+    DigilentPgm pgm;
     QApplication a(argc, argv);
-    qDebug() << "Here we go!";
+
+    qDebug() << "\nDigilentPGM v2.0.0";
+    qDebug() << "Digilent Copyright 2017";
+    qDebug() << "Written by Keith Vogel";
+    qDebug() << "Contributions from: Sam Kristoff";
+
+    QDateTime now = QDateTime::currentDateTime();
+    qDebug() << now.toString("dddd, MMMM, dd, yyyy, h:mm:ss AP t") << "\n\n";
 
     //Load arguments into args, ignoring the program name
     QVector<QString> args = QVector<QString>();
@@ -27,13 +35,18 @@ int main(int argc, char *argv[])
         args.append(QString(argv[i]));
     }
 
-    try
+    if(args.length() == 2)
     {
-        DigilentPgm* pgm = new DigilentPgm(args);
+        pgm.programByPort(args[0], args[1]);
     }
-    catch(int e)
+    else if (args.length() == 3 && args[1] == "BoardName")
     {
-        qDebug() << "An exception occured" << e;
+        pgm.programByBoardName(args[0], args[2]);
+    }
+    else
+    {
+        qDebug() << "Invalid number of parameters: 2 parameters are required but " << args.length() << " parameters were provided.";
+        return -1;
     }
 
     //GUI Stuff
@@ -44,6 +57,5 @@ int main(int argc, char *argv[])
 
     //return a.exec();
     return 0;
-
 
 }
